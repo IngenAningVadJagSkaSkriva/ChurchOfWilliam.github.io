@@ -107,7 +107,7 @@ var level = (s) => {
     w.document.open();
     if(mapX == 10 && mapY == 10) {
         wall[2].document.write('<script>var readbook = () => {window.open("KnogGrottisarna.pdf","","HEIGHT=" + screen.availHeight + ",WIDTH=" + screen.availWidth);}</script><button onclick="readbook()">CLICK ME TO READ KNOG GROTTISARNA</button>');
-        wall[1].document.write("WILLIAM IS HOLDING AN MEETING IN LEVEL X15Y10");
+        wall[1].document.write("WILLIAM IS HOLDING AN MEETING IN LEVEL X15Y10 AND HE CAN FORGET ALL THE TIMES YOU HAVE PRAYED TO HIM IF YOU PRAY TO HIM HERE");
         w.document.write("this place feels holy<br>");
     } else if(mapX == 0 && mapY == 0) {
         wall[1].document.write("Welcome to the church of William this place is infinite in size and you will never escape.");
@@ -122,17 +122,27 @@ var level = (s) => {
         }
         EO = 1;
         wall[1].document.write('William classroom: zpzuy46<br>Add another google account to your chromebook to join LINK: <a href="https://www.google.com/accounts/Logout">https://www.google.com/accounts/Logout</a')
-        if(s != 1) wall[3].document.write('<script src="pray.js"></script><button onclick="pray()">Click me to pray to William</button>');
+        wall[2].document.write('The is an ICA stora at level X69Y69');
+        if(s != 1) wall[3].document.write('<script src="pray.js"></script><button onclick="pray(1)">Click me to pray to William</button>');
         wall[3].occupied = 1;
         w.document.write("my hand hurts<br>I think I broke a knuckle<br>");
     } else if(checkifprime(mapX) && checkifprime(mapY)) {
         if(wall[3].occupied != 1) wall[3].document.write('<script src="pray.js"></script><button onclick="pray()">Click me to pray to William</button>');
         wall[3].occupied = 1;
+    } else if(mapX == 69 && mapY == 69){
+        for(let i = 0; i < 4; i++) {
+            wall[i].document.write('<img src="ica.jpg" style="HEIGHT: 100%; WIDTH: 100%">');
+            document.getElementById("ica").play();
+            w.document.write("ica?<br>");
+        }
     } else {
         if(!ambient.paused) {
             ambient.pause();
             ambient.currentTime = 0;
-        }
+        } else if(!document.getElementById("ica").paused) {
+            document.getElementById("ica").pause();
+            document.getElementById("ica").currentTime = 0;
+        } 
         EO = 0;
         if(s != 1) for(let i = 1; i < 4; i++) {
             if(RB(0,3) == 1) {
@@ -261,7 +271,11 @@ setInterval(()=>{
     x2 = x;
     y2 = y - w.outerHeight;
     window.moveTo(x,y);
-    w.moveTo(x2,y2);
+    if(y2 <= 0) {
+        w.moveTo(x2,y2 + w.outerHeight * 2);
+    } else {
+        w.moveTo(x2,y2);
+    }
     for(let i = 0; i < 4; i++) {
         if(colision(wall[i].screenX,wall[i].outerWidth,wall[i].screenY,wall[i].outerHeight,x,window.outerWidth,y,window.outerHeight)) {
             x = xo;
@@ -272,5 +286,10 @@ setInterval(()=>{
 wall[1].moveTo((screen.width - wall[1].outerWidth),0);
 wall[2].moveTo(0,(screen.height - wall[2].outerHeight));
 wall[3].moveTo((screen.width - wall[3].outerWidth),(screen.height - wall[3].outerHeight));
+for(let i = 0; i < 4; i++) {
+    if(wall[i].outerWidth != (screen.width * 0.3) || wall[i].outerHeight != (screen.height * 0.25)) {
+        wall[i].resizeTo((screen.width * 0.3),(screen.height * 0.25));
+    }
+}
 },10);
 level();
