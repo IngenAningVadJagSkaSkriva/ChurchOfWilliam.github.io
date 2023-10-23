@@ -90,12 +90,19 @@ var william = () => {
         }
 }
 var level = (s) => {
-    doorsound.currentTime = 0;
-    if(s == null) doorsound.play();
+    if(s != 1) {
+        doorsound.currentTime = 0;
+        doorsound.play();
+    }
     w.document.open();
     for(let i = 0; i < 4; i++) {
-        wall[i].document.open();
-        wall[i].document.title = "WALL";
+        if(s != 1) {
+            wall[i].occupied = 0;
+        }
+        if(wall[i].occupied != 1) {
+            wall[i].document.open();
+            wall[i].document.title = "WALL";
+        }
     }
     w.document.open();
     if(mapX == 10 && mapY == 10) {
@@ -109,14 +116,30 @@ var level = (s) => {
         wall[3].document.write("KNOG GROTTISARNA IS A HOLY BOOK IN WILLIAMISM GO READ IT AT LEVEL X10Y10");
         w.document.write("where am I?<br>");
     } else if(mapX == 15 && mapY == 10) {
-        if(EO != 1) william();
+        if(EO != 1) {
+            william();
+            document.getElementById("ambient").play();
+        }
         EO = 1;
         wall[1].document.write('William classroom: zpzuy46<br>Add another google account to your chromebook to join LINK: <a href="https://www.google.com/accounts/Logout">https://www.google.com/accounts/Logout</a')
+        if(s != 1) wall[3].document.write('<script src="pray.js"></script><button onclick="pray()">Click me to pray to William</button>');
+        wall[3].occupied = 1;
         w.document.write("my hand hurts<br>I think I broke a knuckle<br>");
     } else if(checkifprime(mapX) && checkifprime(mapY)) {
-        wall[3].document.write('<script src="pray.js"></script><button onclick="pray()">Click me to pray to William</button>');
+        if(wall[3].occupied != 1) wall[3].document.write('<script src="pray.js"></script><button onclick="pray()">Click me to pray to William</button>');
+        wall[3].occupied = 1;
     } else {
+        if(!ambient.paused) {
+            ambient.pause();
+            ambient.currentTime = 0;
+        }
         EO = 0;
+        if(s != 1) for(let i = 1; i < 4; i++) {
+            if(RB(0,3) == 1) {
+                wall[i].document.write('<script src="pray.js"></script>I CAN SEE YOU<br><img src="william.webp" onclick="cansee()" style="height: 50%; width: 50%;">');
+                wall[i].occupied = 1;
+            }
+        }
     }
     w.document.write("entered level X" + mapX + "Y" + mapY);
     if(plus <= 0) w.document.write('<br>press "a" to start walking or press "d" to start running');
