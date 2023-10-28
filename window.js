@@ -197,12 +197,12 @@ var level = (s) => {
     }
     if(knogleken != 1) w.document.write("entered level X" + mapX + "Y" + mapY);
     if(knogleken == 1 && bossmode == 0) {
-        w.document.write('press "e" to punch wall<br>knoghealth: '+(knoghealth - knogdebt)+'<br>press: "m" to drink milk and recover '+knogdebt*2+' health');
+        w.document.write('hold or press "e" to punch wall<br>knoghealth: '+(knoghealth - knogdebt)+'<br>press: "m" to drink milk and recover '+knogdebt*2+' health');
     }
     if(knogleken == 1 && mapX == 22 && mapY == 20) {
         w.document.write('hold or press "e" to do knog leken with Hugo<br>YOU: '+(knoghealth - knogdebt)+'<br>HUGO: '+(boss1health - boss1damage));
     }
-    if(plus <= 0) w.document.write('<br>hold or press "a" to start walking or press "d" to start running');
+    if(plus <= 0) w.document.write('<br>press "a" to start walking or press "d" to start running');
     wall[0].document.write("LEVEL: X" + mapX + "Y" + mapY);
 }
 var punch = [];
