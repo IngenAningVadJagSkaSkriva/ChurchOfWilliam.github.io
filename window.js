@@ -70,6 +70,11 @@ else {
 }
 }
 
+var t = () => { //tutorial
+    let tutorial = window.open('','','HEIGHT='+screen.height+',WIDTH='+screen.width);
+tutorial.document.write('<script>var done = () => {alert("CLOSE THIS WINDOW")};</script>use arrow keys to move<br>press "s" to stop<br>press "p" to pause or unpause<br>press "d" to run<br>press "a" to walk<br>press the man face to start the game and start controlling<br>if you cant controll just press the man face again or unpause<br>if you touch a wall you can punch it<br>if the game is buggy close all windows then start game again<br>you can read controls in a window named CONTROLS in level X0Y0<a onclick="done()">, click me if you understand!</a>')
+}
+
 var doorsound = new Audio("door.mp3");
 var yourname;
 var count = 0;
@@ -134,7 +139,7 @@ var level = (s) => {
     } else if(mapX == 0 && mapY == 0) {
         bossmode = 0;
         wall[1].document.write('Welcome to the church of William this place is infinite in size and william is everywhere and you will never escape.<img src="william.webp" style="HEIGHT: 50%; WIDTH=50%;">');
-        wall[2].document.write('use arrow keys to move and press "s" to stop, press "p" to pause or unpause, press "d" to run, press "a" to walk, press the man face to start the game and start controlling and also if you cant controll just press the man face again or unpause');
+        wall[2].document.write('use arrow keys to move and press "s" to stop, press "p" to pause or unpause, press "d" to run, press "a" to walk, press "t" to read tutorial, press the man face to start the game and start controlling and also if you cant controll just press the man face again or unpause');
         wall[2].document.title = "CONTROLS";
         wall[3].document.write("KNOG GROTTISARNA IS A HOLY BOOK IN WILLIAMISM GO READ IT AT LEVEL X10Y10");
         if(knogleken != 1) w.document.write("where am I?<br>");
@@ -202,9 +207,20 @@ var level = (s) => {
     if(knogleken == 1 && mapX == 22 && mapY == 20) {
         w.document.write('hold or press "e" to do knog leken with Hugo<br>YOU: '+(knoghealth - knogdebt)+'<br>HUGO: '+(boss1health - boss1damage));
     }
-    if(plus <= 0) w.document.write('<br>press "a" to start walking or press "d" to start running');
+    if(plus <= 1) w.document.write('<br>press "a" to start walking or press "d" to start running');
     wall[0].document.write("LEVEL: X" + mapX + "Y" + mapY);
+    if(c == 1) {
+        w.document.open();
+        w.document.write("PRESS THE MAN FACE TO CONTROL GAME!<br>");
+        if(p == 1) {
+            w.document.write('GAME IS PAUSED PRESS "P" TO UNPAUSE<br>');
+        }
+    } else if(p == 1) {
+        w.document.open();
+        w.document.write('GAME IS PAUSED PRESS "P" TO UNPAUSE<br>');
+    }
 }
+var c = 0;
 var punch = [];
 var punchcount = 0;
 var upper = 0;
@@ -346,12 +362,17 @@ window.addEventListener("keydown", function (event) {
         } else {
             p = 0;
         }
+        level(1);
         break;
     case "f":
         if(prompt("TYPE THE CODE FOR DEVELOPER TOOLS") != "I hate gays") break;
         mapX = prompt("X");
         mapY = prompt("Y");
         level();
+        break;
+    case "t":
+        plus = 0;
+        t();
         break;
     default:
       return;
@@ -436,6 +457,19 @@ window.moveTo(x,y);
     }
 w.resizeTo(w.outerWidth,w.outerWidth);
 if(wall[3].confirm("do you need an tutorial?")) {
-    var tutorial = window.open('','','HEIGHT='+screen.height+',WIDTH='+screen.width);
-tutorial.document.write('<script>var done = () => {alert("CLOSE THIS WINDOW")};</script>use arrow keys to move and press "s" to stop, press "p" to pause or unpause, press "d" to run, press "a" to walk, press the man face to start the game and start controlling and also if you cant controll just press the man face again or unpause and if you touch a wall you can punch it and if the game is buggy close all windows then start game again and you can read controls in a window named CONTROLS in level X0Y0<a onclick="done()">, click me if you understand!</a>')
+    let tutorial = window.open('','','HEIGHT='+screen.height+',WIDTH='+screen.width);
+tutorial.document.write('<script>var done = () => {alert("CLOSE THIS WINDOW")};</script>use arrow keys to move<br>press "s" to stop<br>press "p" to pause or unpause<br>press "d" to run<br>press "a" to walk<br>press "t" if you need to read the tutorial again<br>press the man face to start the game and start controlling<br>if you cant controll just press the man face again or unpause<br>if you touch a wall you can punch it<br>if the game is buggy close all windows then start game again<br>you can read controls in a window named CONTROLS in level X0Y0<a onclick="done()">, click me if you understand!</a>')
+}
+onblur = () => {
+    if(c == 0) {
+        c = 1;
+        if(knogleken != 1) plus = 0;
+        level(1);
+    }
+}
+onfocus = () => {
+    if(c == 1) {
+        c = 0;
+        level(1);
+    }
 }
