@@ -212,9 +212,6 @@ var level = (s) => {
     if(c == 1) {
         w.document.open();
         w.document.write("PRESS THE MAN FACE TO CONTROL GAME!<br>");
-        if(p == 1) {
-            w.document.write('GAME IS PAUSED PRESS "P" TO UNPAUSE<br>');
-        }
     } else if(p == 1) {
         w.document.open();
         w.document.write('GAME IS PAUSED PRESS "P" TO UNPAUSE<br>');
@@ -258,13 +255,22 @@ var bossmode = 0;
 var keo = 0;
 var w = window.open('','','HEIGHT=' + window.outerHeight * 1.1 + ',WIDTH=' + window.outerHeight * 1.1);
 var wall = [];
+var wallX = [];
+var wallY = [];
 for(let i = 0; i < 4; i++) {
     wall[i] = window.open('','','HEIGHT=' + screen.height * 0.25 + ',WIDTH=' + screen.width * 0.3);
 }
-wall[0].moveTo(0,0);
-wall[1].moveTo((screen.width - wall[1].outerWidth),0);
-wall[2].moveTo(0,(screen.height - wall[2].outerHeight));
-wall[3].moveTo((screen.width - wall[3].outerWidth),(screen.height - wall[3].outerHeight));
+wallX[0] = 0;
+wallY[0] = 0;
+wallX[1] = screen.width - wall[1].outerWidth;
+wallY[1] = 0;
+wallX[2] = 0;
+wallY[2] = screen.height - wall[2].outerHeight;
+wallX[3] = screen.width - wall[3].outerWidth;
+wallY[3] = screen.height - wall[3].outerHeight;
+for(let i = 0; i < 4; i++) {
+    wall[i].moveTo(wallX[i],wallY[i]);
+}
 w.moveTo(x2,y2);
 window.addEventListener("keydown", function (event) {
     if (event.defaultPrevented) {
@@ -422,7 +428,7 @@ setInterval(()=>{
         w.moveTo(x2,y2);
     }
     for(let i = 0; i < 4; i++) {
-        if(colision(wall[i].screenX,wall[i].outerWidth,wall[i].screenY,wall[i].outerHeight,x,window.outerWidth,y,window.outerHeight)) {
+        if(colision(wallX[i],wall[i].outerWidth,wallY[i],wall[i].outerHeight,x,window.outerWidth,y,window.outerHeight)) {
             if(i <= 1) {
                 upper = 1;
             } else upper = 0;
@@ -462,6 +468,7 @@ tutorial.document.write('<script>var done = () => {alert("CLOSE THIS WINDOW")};<
 }
 onblur = () => {
     if(c == 0) {
+        p = 1;
         c = 1;
         if(knogleken != 1) plus = 0;
         level(1);
