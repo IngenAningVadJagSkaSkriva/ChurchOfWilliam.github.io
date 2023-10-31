@@ -356,6 +356,10 @@ window.addEventListener("keydown", function (event) {
         level(1);
         break;
     case "e":
+        if(localStorage.getItem("hugo") == "ok") {
+            damage = 1;
+            damage *= 2; //I know this is kind of stupid from your perspective but maybe there will be future updates!
+        }
         if(knogleken == 1 && bossmode == 0) {
             punchcount++;
             if(punchcount >= 100) punchcount = 0;
