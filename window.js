@@ -200,6 +200,9 @@ var level = (s) => {
         }
     } else if(mapX == 15 && mapY == 17){ 
         if(EO != 1) {
+            x = screen.width / 2;
+            y = screen.height / 2;
+            window.moveTo(x,y);
             alert("You found a dead cat!");
         }
         EO = 1;
