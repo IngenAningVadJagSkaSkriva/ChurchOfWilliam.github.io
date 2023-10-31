@@ -76,6 +76,7 @@ tutorial.document.write('<script>var done = () => {alert("CLOSE THIS WINDOW")};<
 }
 
 var doorsound = new Audio("door.mp3");
+var longbark = new Audio("longbark.mp3");
 var yourname;
 var count = 0;
 var countMax = 1;
@@ -86,6 +87,13 @@ var k = () => { //knogleken
     plus = 0;
     alert("You will never win knogleken against me, but you can try and to do that just go into the wall that im at and I can be used for training to increase your health.");
         
+}
+var bellafight = () => {
+    plus = 0;
+    x = screen.width / 2;
+    y = screen.height / 2;
+    window.moveTo(x,y);
+    alert('Bella: WOOF WOOF (tug of war)');
 }
 var hugofight = () => {
     plus = 0;
@@ -118,6 +126,7 @@ var level = (s) => {
         doorsound.currentTime = 0;
         doorsound.play();
         boss1damage = 0;
+        boss2damage = 0;
         knogdebt = 0;
     }
     w.document.open();
@@ -179,7 +188,25 @@ var level = (s) => {
         for(let i = 0;i < 4; i++) {
             wall[i].document.write('<img src="hugo.jpg" style="HEIGHT: 100%; WIDTH: 100%">');
         }
-    } else if(checkifprime(mapX) && checkifprime(mapY)) {
+    } else if(mapX == 23 && mapY == 19) {
+        bossmode = 1;
+        if(EO != 1) {
+            bellafight();
+            document.getElementById("bella").play();
+        }
+        EO = 1;
+        for(let i = 0;i < 4; i++) {
+            wall[i].document.write('<img src="bella.png" style="HEIGHT: 100%; WIDTH: 100%">');
+        }
+    } else if(mapX == 15 && mapY == 17){ 
+        if(EO != 1) {
+            alert("You found a dead cat!");
+        }
+        EO = 1;
+        for(let i = 0; i < 4; i++) {
+            wall[i].document.write('<img src="parlan.jpg" style="HEIGHT: 100%; WIDTH: 100%">');
+        }
+    }else if(checkifprime(mapX) && checkifprime(mapY)) {
         bossmode = 0;
         if(wall[3].occupied != 1) wall[3].document.write('<script src="pray.js"></script><button onclick="pray()">Click me to pray to William</button>');
         wall[3].occupied = 1;
@@ -191,7 +218,10 @@ var level = (s) => {
         } else if(!document.getElementById("ica").paused) {
             document.getElementById("ica").pause();
             document.getElementById("ica").currentTime = 0;
-        } 
+        } else if(!document.getElementById("bella").paused) {
+            document.getElementById("bella").pause();
+            document.getElementById("bella").currentTime = 0;
+        }
         EO = 0;
         if(s != 1) for(let i = 1; i < 4; i++) {
             if(RB(0,3) == 1) {
@@ -206,6 +236,8 @@ var level = (s) => {
     }
     if(knogleken == 1 && mapX == 22 && mapY == 20) {
         w.document.write('hold or press "e" to do knog leken with Hugo<br>YOU: '+(knoghealth - knogdebt)+'<br>HUGO: '+(boss1health - boss1damage));
+    } else if(knogleken == 1 && mapX == 23 && mapY == 19) {
+        w.document.write('hold or press "e" to play tug of war with Bella<br>YOU: '+(knoghealth - knogdebt)+'<br>BELLA: '+(boss2health - boss2damage));
     }
     if(plus <= 1) w.document.write('<br>press "a" to start walking or press "d" to start running');
     wall[0].document.write("LEVEL: X" + mapX + "Y" + mapY);
@@ -219,10 +251,12 @@ var level = (s) => {
 }
 var c = 0;
 var punch = [];
+var bark = [];
 var punchcount = 0;
 var upper = 0;
 for(let i = 0; i < 100; i++) {
     punch[i] = new Audio("punch.mp3");
+    bark[i] = new Audio("shortbark.mp3");
 }
 var drink = new Audio("drink.mp3");
 var scream = new Audio("scream.mp3");
@@ -242,6 +276,8 @@ var p = 0;
 var x2 = x;
 var y2 = y - window.outerHeight;
 var knogleken = 0;
+var damage = 1;
+if(localStorage.getItem("hugo") == "ok") damage *= 2;
 if(localStorage.getItem("k") == "ok") {
     var knoghealth = parseInt(localStorage.getItem("knoghealth"));
 } else {
@@ -250,7 +286,9 @@ if(localStorage.getItem("k") == "ok") {
 if(knoghealth <= 0) knoghealth = 1;
 var knogdebt = 0;
 var boss1health = 1000;
+var boss2health = 100000;
 var boss1damage = 0;
+var boss2damage = 0;
 var bossmode = 0;
 var keo = 0;
 var w = window.open('','','HEIGHT=' + window.outerHeight * 1.1 + ',WIDTH=' + window.outerHeight * 1.1);
@@ -322,18 +360,18 @@ window.addEventListener("keydown", function (event) {
             punchcount++;
             if(punchcount >= 100) punchcount = 0;
             if(knoghealth - knogdebt > 0) {
-                knogdebt++;
+                knogdebt += damage;
             } else {
                 scream.play();
                 alert("NERVE DAMAGE!");
             }
             punch[punchcount].play();
-        } else if(knogleken == 1 && bossmode == 1) {
+        } else if(knogleken == 1 && bossmode == 1 && mapX == 22 && mapY == 20) { // hugofight
             if(mapX == 22 && mapY == 20) {
                 punchcount++;
             if(punchcount >= 100) punchcount = 0;
             if(knoghealth - knogdebt > 0) {
-                knogdebt++;
+                knogdebt += damage;
             } else {
                 scream.play();
                 alert("YOU LOSE");
@@ -341,15 +379,42 @@ window.addEventListener("keydown", function (event) {
                 boss1damage = 0;
             }
             if(boss1health - boss1damage > 0) {
-                boss1damage++;
+                boss1damage += damage;
             } else {
                 scream.play();
-                alert("YOU WON");
+                alert("YOU WON AND GOT 5000 MORE HEALTH AND A DOG WANTS TO PLAY TUG OF WAR WITH YOU AT LEVEL X23Y19!");
+                if(RB(1,20) == 1) {
+                    alert("YOU GOT HUGOS GLASSES AND THEY MADE YOU 2X STRONGER! (boost only happens once)");
+                    let wglas = window.open('','','HEIGHT=1,WIDTH=1');
+                    wglas.document.write('<script src="short.js"></script><img src="RarehugoGlasses.png" style="HEIGHT: 100%; WIDTH: 100%;">');
+                    localStorage.setItem("hugo","ok");
+                }
+                knoghealth += 5000;
                 knogdebt = 0;
                 boss1damage = 0;
             }
             punch[punchcount].play();
             }
+        } else if(knogleken == 1 && bossmode == 1 && mapX == 23 && mapY == 19) { //bella fight
+            punchcount++;
+            if(punchcount >= 100) punchcount = 0;
+            if(knoghealth - knogdebt > 0) {
+                knogdebt += damage * 100;
+            } else {
+                scream.play();
+                alert("YOU LOSE");
+                knogdebt = 0;
+                boss2damage = 0;
+            }
+            if(boss2health - boss2damage > 0) {
+                boss2damage += damage * 100;
+            } else {
+                longbark.play();
+                alert("YOU WON");
+                knogdebt = 0;
+                boss2damage = 0;
+            }
+            bark[punchcount].play();
         }
         level(1);
         break;
@@ -468,7 +533,6 @@ tutorial.document.write('<script>var done = () => {alert("CLOSE THIS WINDOW")};<
 }
 onblur = () => {
     if(c == 0) {
-        p = 1;
         c = 1;
         if(knogleken != 1) plus = 0;
         level(1);
